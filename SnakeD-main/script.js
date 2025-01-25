@@ -5,6 +5,7 @@ let scoreContainer = document.querySelector(".score-container");
 //TODO: SnakeSkin corrected - DONE
 //TODO: Audio
 //TODO: Score == 200 , finish - DONE
+//TODO: Snake sprite (See why there's an override)
 
 let foodX,foodY;
 let headX = 10,headY = 10;
@@ -15,6 +16,8 @@ let gamestate = 0;
 let timeinterval = 110;
 let snakeSkintemp =[];
 let snakeSkin = [];
+let snakeHead = document.querySelector(".snake-head");
+let headPos;
 
 SnakeStart();
 
@@ -96,15 +99,29 @@ function renderGame(){
     }
     }
 
-    for(let i=0;i<snakeBody.length;i++){
-        updatedGame += `<div class="snake" style="grid-area: ${snakeBody[i][1]}/${snakeBody[i][0]};"></div>`
+    let headRotation = "rotate(0deg)";
+    let headScale = "";
+    if (velocityX === 1) {
+        headScale = "scaleX(-1)";
+    } else if (velocityX === -1) {
+        headRotation = "rotate(0deg)";
+    } else if (velocityY === -1) {
+        headRotation = "rotate(90deg)";
+    } else if (velocityY === 1) {
+        headRotation = "rotate(-90deg)"
+        headScale = "scaleY(-1)";
+    }
+
+    updatedGame += `<img src="SnakeHead.gif" class="snake-head" style="grid-area: ${headY}/${headX}; width: 100%; height: 100%; transform: ${headRotation + headScale}">`;
+
+    for(let i = 0; i < snakeBody.length; i++) {
+        updatedGame += `<div class="snake" style="grid-area: ${snakeBody[i][1]}/${snakeBody[i][0]};"></div>`;
     }
     for (let i = 0; i < snakeSkintemp.length; i++) {
         updatedGame += `<div class="snake-skin" style="grid-area: ${snakeSkintemp[i][1]}/${snakeSkintemp[i][0]};"></div>`;
     }
-    
-    gameContainer.innerHTML += snakeSkin;
-    gameContainer.innerHTML = updatedGame;
+
+    gameContainer.innerHTML = updatedGame + snakeSkin;
 
 }
 
@@ -113,10 +130,12 @@ setInterval(renderGame,timeinterval);
 
 document.addEventListener("keydown",function(e){
     let key = e.key;
+    
     if(key == "ArrowUp" && velocityY!=1){
         velocityX = 0;
         velocityY = -1;
         gamestate = 1;
+        snakeHead.style.transform = 'rotate(90deg)';
     }else if(key == "ArrowDown" && velocityY!=-1){
         velocityX = 0;
         velocityY = 1;
