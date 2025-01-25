@@ -47,10 +47,17 @@ body{
     border-radius: 50%;
 }
 
-.snake{
-    background-color: rgb(47, 0, 255);
-}
-
 .snake-skin{
     background-color: rgb(100, 24, 24);
+}
+
+.snake{
+    color:blue;
+}
+
+.snake-head {
+    background-image: url('SnakeHead.gif');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
 }
